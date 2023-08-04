@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../store/appContext";
 
 export const Navbar = () => {
+
+	const {store, actions} = useContext(Context)
+
 	return (
 		<nav className="navbar navbar-light bg-light">
 			<div className="container">
@@ -13,6 +17,13 @@ export const Navbar = () => {
 						<button className="btn btn-primary">Check the Context in action</button>
 					</Link>
 				</div>
+				{localStorage.getItem("token") ? <div className="ml-auto">
+					<button className="btn btn-primary" onClick={actions.logout}>Logout</button>
+				</div> : <div className="ml-auto">
+					<Link to="/login">
+						<button className="btn btn-primary">Login</button>
+					</Link>
+				</div>}
 			</div>
 		</nav>
 	);

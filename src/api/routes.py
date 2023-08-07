@@ -35,6 +35,28 @@ def create_user():
     
     return jsonify(response_body), 200
 
+#signup users
+@api.route("/signup", methods=["POST"])
+def signup():
+    request_body = request.get_json(force=True)
+    email = request.json.get("email", None)
+
+    #creacion de un registro en la tabla de user
+    if "is_active" not in request_body:
+        request_body.update({"is_active":True})
+    if "email" not in request_body:
+        return jsonify({"msg": "You have to put an email"}), 404
+    email_query = User.query.filter_by(email=request_body["email"]).first()
+    if email_query != None:
+        return jsonify({"msg": "User already exists"}), 400
+    if "password" not in request_body:
+        return jsonify({"msg": "You have to put a password"}), 404
+    user = User(email=request_body["email"],password=request_body["password"],is_active=request_body["is_active"])
+    db.session.add(user)
+    db.session.commit()
+    
+    access_token = create_access_token(identity=email)
+    return jsonify({"access_token":access_token, "user": user.serialize() })
 
 #login users
 # Create a route to authenticate your users and return JWTs. The
@@ -58,7 +80,7 @@ def login():
 #ruta protegida
 # Protect a route with jwt_required, which will kick out requests
 # without a valid JWT present.
-@api.route("/profile", methods=["POST"])
+@api.route("/profile", methods=["GET"])
 @jwt_required()
 def get_profile():
     # Access the identity of the current user with get_jwt_identity
@@ -66,4 +88,4 @@ def get_profile():
     user = User.query.filter_by(email=current_user).first()
     if user : 
         return jsonify(True), 200
-    return jsonify(False), 403 
+    return jsonify(False), 403

@@ -6,18 +6,18 @@ import { Context } from "../store/appContext";
 export const Profile = () => {
 	const { store, actions } = useContext(Context);
     const navigate = useNavigate()
+
     const kickUser = async() => {
-        await actions.protected() ? " " : 
-        (navigate("/login"))
+         await actions.protected() ? " " : (navigate("/login"))
     }
 
 	useEffect(() => {
-        kickUser() 
-    }, [])
+         kickUser() 
+   }, [])
 
 	return (
 		<div className="container">
-            <h1>Protected path</h1>
+            <h1 className="text-center p-4">Protected path</h1>
 		</div>
 	);
 };

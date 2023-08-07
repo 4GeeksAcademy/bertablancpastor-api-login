@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 
-export const Login = () => {
+export const Signup = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate()
     const [email, setEmail] = useState("");
@@ -11,14 +11,14 @@ export const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        actions.login(email, password) ? navigate("/profile") : alert("No te has logueado correctamente")
+        actions.signup(email, password) ? navigate("/") : alert("No te has registrado correctamente")        
     }
 
 
     return (
         <form className="container mt-5" onSubmit={e => handleSubmit(e)}>
-            <h1 className="">Welcome, login to your account!</h1>
-            <div className="row mb-3 w-50 justify-center">
+            <h1 className="">Welcome, create an acconut!</h1>
+            <div className="row mb-3 w-50 text-center">
                 <label htmlFor="inputEmail3" className="col-sm-2 col-form-label">Email</label>
                 <div className="col-sm-10">
                 <input type="email" className="form-control" id="inputEmail3" onChange={e=>setEmail(e.target.value)} />
@@ -31,9 +31,7 @@ export const Login = () => {
                 </div>            
             </div>
 
-            <input type="submit" className="btn btn-success m-1" value="Login" />
-        </form>        
+            <input type="submit" className="btn btn-primary m-1" value="Signup" />
+        </form>
     );
 };
-
-
